@@ -13,7 +13,7 @@ body {
   color: #fff;
 }
 
-/* 中央寄せグリッド */
+/* ギャラリー中央 */
 .gallery-wrapper {
   display: flex;
   justify-content: center;
@@ -36,13 +36,23 @@ body {
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.95);
+  background: #000;
   display: none;
   justify-content: center;
   align-items: center;
 }
 .modal.active {
   display: flex;
+}
+
+/* ぼかし背景 */
+.blur-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(40px) brightness(0.5);
+  transform: scale(1.1);
 }
 
 /* UI */
@@ -52,6 +62,7 @@ body {
   right: 20px;
   font-size: 28px;
   cursor: pointer;
+  z-index: 10;
 }
 .nav {
   position: absolute;
@@ -60,6 +71,7 @@ body {
   font-size: 36px;
   cursor: pointer;
   user-select: none;
+  z-index: 10;
 }
 .prev { left: 15px; }
 .next { right: 15px; }
@@ -69,27 +81,34 @@ body {
   position: relative;
   width: 95%;
   max-width: 900px;
-  aspect-ratio: 3/2;
-  overflow: hidden;
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
 }
+
+/* 画像 */
 .slider-container img {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
+
 .after {
   clip-path: inset(0 50% 0 0);
 }
 
-/* スライダーUI */
+/* スライダー */
 .range {
   position: absolute;
   bottom: 10px;
-  width: 100%;
+  width: 90%;
+  z-index: 10;
 }
 
-/* スマホ調整 */
+/* スマホ */
 @media (max-width: 600px) {
   .nav {
     font-size: 28px;
@@ -105,6 +124,8 @@ body {
 </div>
 
 <div class="modal" id="modal">
+  <div class="blur-bg" id="blurBg"></div>
+
   <div class="close" onclick="closeModal()">×</div>
   <div class="nav prev" onclick="prev()">←</div>
   <div class="nav next" onclick="next()">→</div>
@@ -119,19 +140,139 @@ body {
 <script>
 const data = [
   {
-    before: "https://picsum.photos/id/1011/1200/800",
-    after:  "https://picsum.photos/id/1012/1200/800",
-    thumb:  "https://picsum.photos/id/1011/400/300"
+    before: "image/before/001.jpg",
+    after:  "image/after/001.jpg",
+    thumb:  "image/thumbnail/001.jpg"
   },
   {
-    before: "https://picsum.photos/id/1025/1200/800",
-    after:  "https://picsum.photos/id/1020/1200/800",
-    thumb:  "https://picsum.photos/id/1025/400/300"
+    before: "image/before/002.jpg",
+    after:  "image/after/002.jpg",
+    thumb:  "image/thumbnail/002.jpg"
   },
   {
-    before: "https://picsum.photos/id/1035/1200/800",
-    after:  "https://picsum.photos/id/1039/1200/800",
-    thumb:  "https://picsum.photos/id/1035/400/300"
+    before: "image/before/003.jpg",
+    after:  "image/after/003.jpg",
+    thumb:  "image/thumbnail/003.jpg"
+  },
+  {
+    before: "image/before/004.jpg",
+    after:  "image/after/004.jpg",
+    thumb:  "image/thumbnail/004.jpg"
+  },
+  {
+    before: "image/before/005.jpg",
+    after:  "image/after/005.jpg",
+    thumb:  "image/thumbnail/005.jpg"
+  },
+  {
+    before: "image/before/006.jpg",
+    after:  "image/after/006.jpg",
+    thumb:  "image/thumbnail/006.jpg"
+  },
+  {
+    before: "image/before/007.jpg",
+    after:  "image/after/007.jpg",
+    thumb:  "image/thumbnail/007.jpg"
+  },
+  {
+    before: "image/before/008.jpg",
+    after:  "image/after/008.jpg",
+    thumb:  "image/thumbnail/008.jpg"
+  },
+  {
+    before: "image/before/009.jpg",
+    after:  "image/after/009.jpg",
+    thumb:  "image/thumbnail/009.jpg"
+  },
+  {
+    before: "image/before/010.jpg",
+    after:  "image/after/010.jpg",
+    thumb:  "image/thumbnail/010.jpg"
+  },
+  {
+    before: "image/before/010.jpg",
+    after:  "image/after/010.jpg",
+    thumb:  "image/thumbnail/010.jpg"
+  },
+  {
+    before: "image/before/011.jpg",
+    after:  "image/after/011.jpg",
+    thumb:  "image/thumbnail/011.jpg"
+  },
+  {
+    before: "image/before/012.jpg",
+    after:  "image/after/012.jpg",
+    thumb:  "image/thumbnail/012.jpg"
+  },
+  {
+    before: "image/before/013.jpg",
+    after:  "image/after/013.jpg",
+    thumb:  "image/thumbnail/013.jpg"
+  },
+  {
+    before: "image/before/014.jpg",
+    after:  "image/after/014.jpg",
+    thumb:  "image/thumbnail/014.jpg"
+  },
+  {
+    before: "image/before/015.jpg",
+    after:  "image/after/015.jpg",
+    thumb:  "image/thumbnail/015.jpg"
+  },
+  {
+    before: "image/before/016.jpg",
+    after:  "image/after/016.jpg",
+    thumb:  "image/thumbnail/016.jpg"
+  },
+  {
+    before: "image/before/017.jpg",
+    after:  "image/after/017.jpg",
+    thumb:  "image/thumbnail/017.jpg"
+  },
+  {
+    before: "image/before/018.jpg",
+    after:  "image/after/018.jpg",
+    thumb:  "image/thumbnail/018.jpg"
+  },
+  {
+    before: "image/before/019.jpg",
+    after:  "image/after/019.jpg",
+    thumb:  "image/thumbnail/019.jpg"
+  },
+  {
+    before: "image/before/020.jpg",
+    after:  "image/after/020.jpg",
+    thumb:  "image/thumbnail/020.jpg"
+  },
+  {
+    before: "image/before/021.jpg",
+    after:  "image/after/021.jpg",
+    thumb:  "image/thumbnail/021.jpg"
+  },
+  {
+    before: "image/before/022.jpg",
+    after:  "image/after/022.jpg",
+    thumb:  "image/thumbnail/022.jpg"
+  },
+  {
+    before: "image/before/023.jpg",
+    after:  "image/after/023.jpg",
+    thumb:  "image/thumbnail/023.jpg"
+  },
+  {
+    before: "image/before/024.jpg",
+    after:  "image/after/024.jpg",
+    thumb:  "image/thumbnail/024.jpg"
+  },
+  {
+    before: "image/before/025.jpg",
+    after:  "image/after/025.jpg",
+    thumb:  "image/thumbnail/025.jpg"
+  },
+  {
+    before: "image/before/026.jpg",
+    after:  "image/after/026.jpg",
+    thumb:  "image/thumbnail/026.jpg"
   }
 ];
 
@@ -141,10 +282,11 @@ const beforeImg = document.getElementById("beforeImg");
 const afterImg = document.getElementById("afterImg");
 const slider = document.getElementById("slider");
 const container = document.getElementById("sliderContainer");
+const blurBg = document.getElementById("blurBg");
 
 let current = 0;
 
-/* ギャラリー生成 */
+/* ギャラリー */
 data.forEach((item, index) => {
   const img = document.createElement("img");
   img.src = item.thumb;
@@ -152,16 +294,11 @@ data.forEach((item, index) => {
   gallery.appendChild(img);
 });
 
-/* 画像プリロード */
-function preloadImages() {
-  data.forEach(item => {
-    const img1 = new Image();
-    const img2 = new Image();
-    img1.src = item.before;
-    img2.src = item.after;
-  });
-}
-preloadImages();
+/* プリロード */
+data.forEach(item => {
+  new Image().src = item.before;
+  new Image().src = item.after;
+});
 
 function openModal(index){
   current = index;
@@ -184,8 +321,19 @@ function prev(){
 }
 
 function update(){
+  const imgSrc = data[current].before;
+
+  /* 背景更新 */
+  blurBg.style.backgroundImage = `url(${imgSrc})`;
+
+  beforeImg.onload = () => {
+    const ratio = beforeImg.naturalWidth / beforeImg.naturalHeight;
+    container.style.height = ratio < 1 ? "90vh" : "75vh";
+  };
+
   beforeImg.src = data[current].before;
   afterImg.src = data[current].after;
+
   slider.value = 50;
   updateSlider();
 }
@@ -197,7 +345,7 @@ function updateSlider(){
 
 slider.addEventListener("input", updateSlider);
 
-/* スワイプ対応 */
+/* スワイプ */
 let startX = 0;
 
 container.addEventListener("touchstart", e => {
@@ -205,9 +353,7 @@ container.addEventListener("touchstart", e => {
 });
 
 container.addEventListener("touchend", e => {
-  let endX = e.changedTouches[0].clientX;
-  let diff = startX - endX;
-
+  let diff = startX - e.changedTouches[0].clientX;
   if (diff > 50) next();
   if (diff < -50) prev();
 });
